@@ -25,7 +25,7 @@
       const json = JSON.stringify({ name, phone });
       const encrypted = CryptoJS.AES.encrypt(json, SECRET_KEY).toString();
 
-      fetch('YOUR_GAS_ENDPOINT_HERE', {
+      fetch('https://script.google.com/macros/s/AKfycbx-yC8hxdKrv8f5OSy7CkFRkHJ4NJIw0yQCoFyTAggAKOD1izFUKpHaQMU2RZ18Up763g/exec', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ payload: encrypted })
