@@ -25,7 +25,7 @@
       const json = JSON.stringify({ name, phone });
       const encrypted = CryptoJS.AES.encrypt(json, SECRET_KEY).toString();
 
-      fetch('https://script.google.com/macros/s/AKfycbx-yC8hxdKrv8f5OSy7CkFRkHJ4NJIw0yQCoFyTAggAKOD1izFUKpHaQMU2RZ18Up763g/exec', {
+      fetch('https://script.google.com/macros/s/AKfycbyZsQM2kaZj5nToscD7s8KAAoIhBuLgKRdnZSY1CFVR02zSJ4hzj1R2dIRypDFAGxtJ/exec', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ payload: encrypted })
@@ -34,6 +34,7 @@
         document.getElementById('status').innerText = "送信完了（スプレッドシートを確認）";
       })
       .catch(err => {
+        console.error(err);
         document.getElementById('status').innerText = "エラーが発生しました";
       });
     });
