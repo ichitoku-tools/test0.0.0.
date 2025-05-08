@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>暗号復号ビューア</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+<body>
+  <h2>スプレッドシートからコピーした暗号文を復号</h2>
+  <textarea id="input" rows="5" cols="60" placeholder="ここに暗号文を貼り付けてください"></textarea><br><br>
+  <button onclick="decrypt()">復号する</button>
+  <pre id="result"></pre>
+
+  <script>
+    const SECRET_KEY = "TestSecretKey123";
+    function decrypt() {
+      try {
+        const ciphertext = document.getElementById("input").value.trim();
+        const bytes = CryptoJS.AES.decrypt(ciphertext, SECRET_KEY);
+        const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+        const obj = JSON.parse(decrypted);
+        document.getElementById("result").innerText = `名前: ${obj.name}\n電話: ${obj.phone}`;
+      } catch (e) {
+        document.getElementById("result").innerText = "復号に失敗しました。";
+      }
+    }
+  </script>
+</body>
+</html>

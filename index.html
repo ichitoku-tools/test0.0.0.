@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>暗号送信テスト</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+<body>
+  <h2>暗号化送信フォーム</h2>
+  <form id="form">
+    <label>名前：<input type="text" id="name" required></label><br><br>
+    <label>電話：<input type="text" id="phone" required></label><br><br>
+    <button type="submit">送信</button>
+  </form>
+  <p id="status"></p>
+
+  <script>
+    const SECRET_KEY = "TestSecretKey123";
+
+    document.getElementById('form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const json = JSON.stringify({ name, phone });
+      const encrypted = CryptoJS.AES.encrypt(json, SECRET_KEY).toString();
+
+      fetch('YOUR_GAS_ENDPOINT_HERE', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ payload: encrypted })
+      })
+      .then(res => {
+        document.getElementById('status').innerText = "送信完了（スプレッドシートを確認）";
+      })
+      .catch(err => {
+        document.getElementById('status').innerText = "エラーが発生しました";
+      });
+    });
+  </script>
+</body>
+</html>
