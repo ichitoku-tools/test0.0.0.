@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>暗号送信テスト</title>
+  <title>暗号化送信テスト</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 <body>
@@ -16,27 +16,31 @@
   <p id="status"></p>
 
   <script>
+    // 新しい GAS エンドポイント
+    const ENDPOINT   = "https://script.google.com/macros/s/AKfycbyANS_aiU5_3xHb_enjnk06amq2kNS2k4JPLZWDrhq4mYq6ecwf0KLGalb3xc-F58ih/exec";
     const SECRET_KEY = "TestSecretKey123";
-    const ENDPOINT   = "https://script.google.com/macros/s/AKfycbySBvD7mteck76kG_W7DMJWmVXSXTvFscdmH7R6Z-F8D1MycD7RcCGCyag2NCC7BbR5/exec";
 
-    document.getElementById('form').addEventListener('submit', function(e) {
+    document.getElementById("form").addEventListener("submit", function(e) {
       e.preventDefault();
-      const name  = document.getElementById('name').value;
-      const phone = document.getElementById('phone').value;
-      const json      = JSON.stringify({ name, phone });
-      const encrypted = CryptoJS.AES.encrypt(json, SECRET_KEY).toString();
 
+      // フォーム入力を AES で暗号化
+      const name      = document.getElementById("name").value;
+      const phone     = document.getElementById("phone").value;
+      const plaintext = JSON.stringify({ name, phone });
+      const encrypted = CryptoJS.AES.encrypt(plaintext, SECRET_KEY).toString();
+
+      // URL-encoded で送信（no-cors モード）
       fetch(ENDPOINT, {
-        method: 'POST',
-        mode:   'no-cors',  // CORS エラーを回避
-        body:   JSON.stringify({ payload: encrypted })
+        method: "POST",
+        mode:   "no-cors",
+        body:   new URLSearchParams({ payload: encrypted })
       })
       .then(() => {
-        document.getElementById('status').innerText = "送信完了（スプレッドシートを確認）";
+        document.getElementById("status").innerText = "送信完了！スプレッドシートをご確認ください。";
       })
       .catch(err => {
         console.error(err);
-        document.getElementById('status').innerText = "送信エラー";
+        document.getElementById("status").innerText = "送信エラーが発生しました";
       });
     });
   </script>
